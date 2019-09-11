@@ -1,0 +1,90 @@
+﻿@model HerbingViewModel
+
+@{
+    ViewData["Title"] = "Herb";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Gather herbs</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label asp-for="SurvivalMod"></label>
+                    <div class="col-sm-5" style="padding-left: 0px">
+                        <input asp-for="SurvivalMod" class="form-control" />
+                        <span asp-validation-for="SurvivalMod" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label asp-for="Advantage"></label>
+                    <div class="col-sm-12" style="padding-left: 0px">
+                        <select asp-for="Advantage" class="custom-select mr-sm-2" asp-items="Html.GetEnumSelectList<Advantage>()"></select>
+                        <span asp-validation-for="Advantage" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label asp-for="Location"></label>
+                    <div class="col-sm-12" style="padding-left: 0px">
+                        <select asp-for="Location" class="custom-select mr-sm-2" asp-items="Html.GetEnumSelectList<Location>()">
+                            <option value="">Please Select</option>
+                        </select>
+                        <span asp-validation-for="Location" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label asp-for="Rarity"></label>
+                    <div class="col-sm-12" style="padding-left: 0px">
+                        <select asp-for="Rarity" class="custom-select mr-sm-2" asp-items="Html.GetEnumSelectList<Rarity>()">
+                            <option value="">Please Select</option>
+                        </select>
+                        <span asp-validation-for="Rarity" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row mb-0">
+                <div class="form-check">
+                    <input asp-for="IsStatic" class="form-check-input" type="checkbox" id="staticCheck">
+                    <label class="form-check-label" for="staticCheck">
+                        Add/Remove Herbs
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group mt-2">
+                <div class="col-sm-2" style="padding-left: 0px">
+                    <input asp-for="Static" class="form-control" id="staticInput" />
+                </div>
+            </div>
+
+            <button type="submit" class="mt-4 btn btn-primary btn-lg text-center form-row" style="width: 200px;">Gather</button>
+
+            <div>
+                <text>@Model.Message</text>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#staticInput').attr("hidden", !$("#staticCheck").is(':checked'));
+            $('#staticInput').val('');
+        });
+
+        $("#staticCheck").click(function () {
+            $('#staticInput').attr("hidden", !$(this).is(':checked'));
+            $('#staticInput').val('');
+        });
+    </script>
+}

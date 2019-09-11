@@ -1,0 +1,138 @@
+﻿@model FullPotionViewModel
+
+@{
+    ViewData["Title"] = "Brew";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Brew</h1>
+
+
+<div>
+
+    <br />
+    <b>Check out a potion:</b>
+    <br />
+    <select id="potionSelect">
+        @{
+            foreach (var item in Model.AllPotions)
+            {
+                <option value="@item.Id">@item.PotionName</option>
+            }
+        }
+    </select>
+
+    <text id="textName"></text>
+    <text id="textDescription"></text>
+    <text id="textDC"></text>
+    <text id="textRarity"></text>
+    <text id="textHerbs"></text>
+
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <b>Brewable potions: </b><br />
+    <select id="craftPotionSelect">
+        <option value="">Select potion...</option>
+        @{
+            foreach (var item in Model.CraftablePotions)
+            {
+                <option value="@item.Id">@item.PotionName</option>
+            }
+        }
+    </select>
+
+</div>
+
+<br />
+
+<form method="post">
+    <input asp-for="SelectedPotionId" id="potionId" hidden="hidden" />
+
+    <div>
+        <label asp-for="Advantage"></label>
+        <div>
+            <select asp-for="Advantage" class="custom-select mr-sm-2" asp-items="Html.GetEnumSelectList<Advantage>()"></select>
+            <span asp-validation-for="Advantage" class="text-danger"></span>
+        </div>
+    </div>
+
+    <br />
+
+    <div>
+        <text>Herbalism mod:</text>
+        <br />
+
+        <div>
+            <input asp-for="HerbalismMod" />
+        </div>
+    </div>
+
+    <br />
+
+    <button id="brewButton" type="submit" class="mt-4 btn btn-primary btn-lg text-center" style="width: 200px;">Brew</button>
+
+    <br />
+
+    <div>
+        <text>@Model.Message</text>
+    </div>
+
+</form>
+
+@section Scripts{
+    <script>
+        var rarity = { "0": "Common", "1": "Uncommon", "2": "Rare", "3": "Very Rare"};
+        var list = @Json.Serialize(Model.AllPotions);
+
+        $(document).ready(function () {
+            Populate($('#potionSelect'));
+            var value = $('#craftPotionSelect').val()
+            if (value != "")
+            {
+                $('#potionId').val(value);
+                $('#brewButton').removeAttr("disabled");
+            }
+            else
+            {
+                $('#brewButton').prop("disabled", "true");
+            }
+        })
+
+        $('#potionSelect').change(function () {
+            Populate($(this));
+        })
+        $('#craftPotionSelect').change(function () {
+            var value = $('#craftPotionSelect').val()
+            if (value != "")
+            {
+                $('#potionId').val(value);
+                $('#potionSelect').val(value);
+                $('#brewButton').removeAttr("disabled");
+                Populate($('#potionSelect'));
+            }
+            else
+            {
+                $('#brewButton').prop("disabled", "true");
+            }
+        })
+
+        function Populate(pressed) {
+            var index = pressed.find('option:selected')[0].index;
+            $('#textName').html("<br><b>Name:</b> " + list[index]['potionName']);
+            $('#textDescription').html("<br><b>Description:</b> " + list[index]['description']);
+            $('#textDC').html("<br><b>Crafting DC:</b> " + list[index]['dc']);
+            $('#textRarity').html("<br><b>Rarity:</b> " + rarity[list[index]['rarity']]);
+            if (index == 35) {
+                $('#textRarity').html("<br><b>Rarity:</b> Legendary");
+            }
+            var herbText = "<br><b>Herbs:</b> ";
+            $.each(list[index]['herbs'], function (i, item) {
+                herbText += "<br>" + item['amount'] + "x " + item['herbName'];
+            })
+            $('#textHerbs').html(herbText);
+        }
+    </script>
+}

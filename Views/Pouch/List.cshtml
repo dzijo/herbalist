@@ -1,0 +1,38 @@
+﻿@model IEnumerable<HerbViewModel>
+
+@{
+    ViewData["Title"] = "Pouch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center mb-2">
+    <h1>Pouch</h1>
+</div>
+
+<div class="mb-2 btn-toolbar" style="padding-left: 15px">
+    <a class="btn btn-primary text-dark btn-lg text-center m-auto" style="width: 200px;" asp-area="" asp-controller="Pouch" asp-action="Herb">Gather</a>
+    <a class="btn btn-primary text-dark btn-lg text-center m-auto" style="width: 200px;" asp-area="" asp-controller="Pouch" asp-action="Brew">Brew</a>
+</div>
+<table class="table table-striped table-dark table-hover table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Herb</th>
+            <th>Location</th>
+            <th>Rarity</th>
+            <th>DC</th>
+            <th>Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var herb in Model)
+        {
+            <tr>
+                <td>@herb.HerbName</td>
+                <td>@herb.Location</td>
+                <td>@herb.Rarity</td>
+                <td>@herb.DC</td>
+                <td>@herb.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
